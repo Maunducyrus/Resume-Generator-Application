@@ -76,6 +76,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   {isLogin ? 'Welcome Back' : 'Create Account'}
                 </h2>
                 <button
+                  aria-label="Close modal"
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
@@ -110,11 +111,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       </label>
                       <div className="relative">
                         <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <label htmlFor="profession-field">Profession</label>
                         <select
+                          id="profession-field"
                           name="profession"
                           value={formData.profession}
                           onChange={handleInputChange}
                           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors appearance-none"
+                          
                         >
                           <option value="">Select your profession</option>
                           {professions.map(profession => (

@@ -74,12 +74,18 @@ const CVBuilder: React.FC<CVBuilderProps> = ({ onViewChange }) => {
     switch (stepId) {
       case 1:
         return !!(cvState.currentCV.personalInfo?.fullName && cvState.currentCV.personalInfo?.email);
+      // case 2:
+      //   return cvState.currentCV.education.length > 0;
+      // case 3:
+      //   return cvState.currentCV.workExperience.length > 0;
+      // case 4:
+      //   return cvState.currentCV.skills.length > 0;
       case 2:
-        return cvState.currentCV.education.length > 0;
+        return (cvState.currentCV.education?.length ?? 0) > 0;
       case 3:
-        return cvState.currentCV.workExperience.length > 0;
+        return (cvState.currentCV.workExperience?.length ?? 0) > 0;
       case 4:
-        return cvState.currentCV.skills.length > 0;
+        return (cvState.currentCV.skills?.length ?? 0) > 0;
       case 5:
         return true; // Projects are optional
       case 6:

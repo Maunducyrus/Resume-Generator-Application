@@ -28,6 +28,25 @@ type CVAction =
   | { type: 'REMOVE_CV'; payload: string }
   | { type: 'RESET_CV' };
 
+  // ✅ safe empty CV structure
+const emptyCV: CVData = {
+  personalInfo: {
+    fullName: '',
+    email: '',
+    phone: '',
+    location: '',
+    linkedin: '',
+    github: '',
+    website: '',
+    summary: '',
+  },
+  education: [],
+  workExperience: [],
+  skills: [],
+  projects: [],
+  certifications: [], // added certifications section
+};
+
 const cvReducer = (state: CVState, action: CVAction): CVState => {
   switch (action.type) {
     case 'SET_LOADING':
@@ -55,7 +74,7 @@ const cvReducer = (state: CVState, action: CVAction): CVState => {
     case 'RESET_CV':
       return {
         ...state,
-        currentCV: null,
+        currentCV: emptyCV, // reset to safe empty CV
         selectedTemplate: null,
         currentStep: 1
       };
@@ -65,7 +84,7 @@ const cvReducer = (state: CVState, action: CVAction): CVState => {
 };
 
 const initialState: CVState = {
-  currentCV: null,
+  currentCV: emptyCV, // start with a safe empty CV
   selectedTemplate: null,
   currentStep: 1,
   isLoading: false,

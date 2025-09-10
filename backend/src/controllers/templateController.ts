@@ -8,7 +8,7 @@ const templates = [
     name: 'Modern Professional',
     description: 'Clean, modern design perfect for corporate environments and traditional industries.',
     category: 'Professional',
-    preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
+    preview: 'https://images.unsplash.com/photo-1586281380394-3e09e0f3c5d7?auto=format&fit=crop&w=800&q=80',
     isPremium: false,
     professions: ['Manager', 'Consultant', 'Analyst', 'Director', 'Executive'],
     features: ['ATS-Friendly', 'Clean Layout', 'Professional Typography']
@@ -18,7 +18,7 @@ const templates = [
     name: 'Creative Modern',
     description: 'Bold, creative design for artistic and design professionals.',
     category: 'Creative',
-    preview: 'https://images.pexels.com/photos/590030/pexels-photo-590030.jpeg?auto=compress&cs=tinysrgb&w=400',
+    preview: 'https://images.unsplash.com/photo-1611224923853-80b36bde8b06?auto=format&fit=crop&w=800&q=80',
     isPremium: false,
     professions: ['Graphic Designer', 'Artist', 'Creative Director', 'Photographer'],
     features: ['Creative Layout', 'Visual Elements', 'Artistic Design']
@@ -28,7 +28,7 @@ const templates = [
     name: 'Tech Modern',
     description: 'Modern tech-focused design with clean code aesthetics.',
     category: 'Tech',
-    preview: 'https://images.pexels.com/photos/590036/pexels-photo-590036.jpeg?auto=compress&cs=tinysrgb&w=400',
+    preview: 'https://images.unsplash.com/photo-1607706189992-eae578626c86?auto=format&fit=crop&w=800&q=80',
     isPremium: false,
     professions: ['Software Engineer', 'Developer', 'DevOps Engineer', 'Data Scientist'],
     features: ['Tech-Focused', 'Code Aesthetics', 'Modern Layout']

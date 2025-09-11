@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Menu, X, User, LogOut, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import ProfileModal from '../Profile/ProfileModal';
 
 interface HeaderProps {
   currentView: string;
@@ -11,6 +12,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const { state: authState, logout } = useAuth();
 
   const navigationItems = [
@@ -79,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
                   <button
                     onClick={() => {
                       setIsProfileMenuOpen(false);
-                      // Add profile settings functionality
+                      setShowProfileModal(true);
                     }}
                     className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
                   >
@@ -154,6 +156,12 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
           </motion.div>
         )}
       </div>
+
+      {/* Profile Modal */}
+      <ProfileModal 
+        isOpen={showProfileModal} 
+        onClose={() => setShowProfileModal(false)} 
+      />
     </header>
   );
 };

@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, FileText, Eye, Download, Share2, Trash2, Edit3, Star } from 'lucide-react';
+import { Plus, FileText, Eye, Download, Share2, Trash2, Edit3, Star, ExternalLink } from 'lucide-react';
 import { useCV } from '../../context/CVContext';
 import { useAuth } from '../../context/AuthContext';
+import CVPreview from '../CVBuilder/CVPreview';
 import type { CV } from '../../types';
+import toast from 'react-hot-toast';
 
 interface DashboardProps {
   onViewChange: (view: string) => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onViewChange }) => {
-  const { state: cvState, loadUserCVs, deleteCV } = useCV();
+  const { state: cvState, loadUserCVs, deleteCV, setCurrentCV, setSelectedTemplate, setCurrentStep } = useCV();
   const { state: authState } = useAuth();
   const [selectedCV, setSelectedCV] = useState<CV | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     loadUserCVs();
@@ -26,6 +29,24 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange }) => {
         console.error('Failed to delete CV:', error);
       }
     }
+  };
+
+  const handleEditCV = (cv: CV) => {
+    setCurrentCV(cv.data);
+    setSelectedTemplate(cv.templateId);
+    setCurrentStep(1);
+    onViewChange('builder');
+  };
+
+  const handlePreviewCV = (cv: CV) => {
+    setSelectedCV(cv);
+    setShowPreview(true);
+  };
+
+  const handleShareCV = async (cv: CV) => {
+    const shareUrl = `${window.location.origin}/shared/${cv.shareUrl}`;
+    await navigator.clipboard.writeText(shareUrl);
+    toast.success('Share link copied to clipboard!');
   };
 
   const stats = [
@@ -206,7 +227,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange }) => {
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => {
-                            // Add preview functionality
+                            handlePreviewCV(cv);
                           }}
                           className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Preview"
@@ -215,12 +236,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange }) => {
                         </button>
                         <button
                           onClick={() => {
-                            // Add edit functionality
+                            handleEditCV(cv);
                           }}
                           className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                           title="Edit"
                         >
                           <Edit3 className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleShareCV(cv)}
+                          className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                          title="Share"
+                        >
+                          <ExternalLink className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteCV(cv.id)}
@@ -238,6 +266,30 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange }) => {
           </div>
         </div>
       </div>
+
+      {/* CV Preview Modal */}
+      {showPreview && selectedCV && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">CV Preview - {selectedCV.name}</h3>
+                  <button
+                    onClick={() => setShowPreview(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+              <div className="p-6">
+                <CVPreview cvData={selectedCV.data} templateId={selectedCV.templateId} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

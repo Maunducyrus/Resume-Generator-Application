@@ -211,7 +211,6 @@
 // export default api;
 
 
-
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import type { User, CV, CVData, ATSResult, JobOptimization, APIResponse } from '../types';

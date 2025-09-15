@@ -34,26 +34,26 @@
 
 // export default App
 
-import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { CVProvider } from './context/CVContext';
-import Header from './components/Layout/Header';
-import Dashboard from './components/Dashboard/Dashboard';
-import CVBuilder from './components/CVBuilder/CVBuilder';
-import TemplateGallery from './components/Templates/TemplateGallery';
-import AITools from './components/AITools/AITools';
-import AuthModal from './components/Auth/AuthModal';
-import LandingPage from './components/Landing/LandingPage';
+import React, { useState } from "react";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { CVProvider } from "./context/CVContext";
+import Header from "./components/Layout/Header";
+import Dashboard from "./components/Dashboard/Dashboard";
+import CVBuilder from "./components/CVBuilder/CVBuilder";
+import TemplateGallery from "./components/Templates/TemplateGallery";
+import AITools from "./components/AITools/AITools";
+import AuthModal from "./components/Auth/AuthModal";
+import LandingPage from "./components/Landing/LandingPage";
 
 function AppContent() {
-  const [currentView, setCurrentView] = useState('landing');
+  const [currentView, setCurrentView] = useState("landing");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { state: authState } = useAuth();
 
   const renderCurrentView = () => {
     if (!authState.isAuthenticated) {
       return (
-        <LandingPage 
+        <LandingPage
           onGetStarted={() => setShowAuthModal(true)}
           onLogin={() => setShowAuthModal(true)}
         />
@@ -61,13 +61,13 @@ function AppContent() {
     }
 
     switch (currentView) {
-      case 'dashboard':
+      case "dashboard":
         return <Dashboard onViewChange={setCurrentView} />;
-      case 'builder':
+      case "builder":
         return <CVBuilder onViewChange={setCurrentView} />;
-      case 'templates':
+      case "templates":
         return <TemplateGallery onViewChange={setCurrentView} />;
-      case 'ai-tools':
+      case "ai-tools":
         return <AITools />;
       default:
         return <Dashboard onViewChange={setCurrentView} />;
@@ -90,10 +90,11 @@ function AppContent() {
       {authState.isAuthenticated && (
         <Header currentView={currentView} onViewChange={setCurrentView} />
       )}
-      <main>
-        {renderCurrentView()}
-      </main>
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <main>{renderCurrentView()}</main>
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </div>
   );
 }

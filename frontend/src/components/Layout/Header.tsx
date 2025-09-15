@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FileText, Menu, X, User, LogOut, Settings } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import ProfileModal from '../Profile/ProfileModal';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { FileText, Menu, X, User, LogOut, Settings } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import ProfileModal from "../Profile/ProfileModal";
 
 interface HeaderProps {
   currentView: string;
@@ -16,16 +16,16 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
   const { state: authState, logout } = useAuth();
 
   const navigationItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'builder', label: 'CV Builder', icon: '✏️' },
-    { id: 'templates', label: 'Templates', icon: '🎨' },
-    { id: 'ai-tools', label: 'AI Tools', icon: '🤖' },
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "builder", label: "CV Builder", icon: "✏️" },
+    { id: "templates", label: "Templates", icon: "🎨" },
+    { id: "ai-tools", label: "AI Tools", icon: "🤖" },
   ];
 
   const handleLogout = () => {
     logout();
     setIsProfileMenuOpen(false);
-    onViewChange('dashboard');
+    onViewChange("dashboard");
   };
 
   return (
@@ -37,7 +37,9 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
               <FileText className="h-6 w-6 text-white" />
             </div>
-            <span className="ml-3 text-xl font-bold text-gray-900">AI CV Builder</span>
+            <span className="ml-3 text-xl font-bold text-gray-900">
+              AI CV Builder
+            </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -48,8 +50,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
                 onClick={() => onViewChange(item.id)}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   currentView === item.id
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
                 <span className="mr-2">{item.icon}</span>
@@ -68,7 +70,9 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
                   <User className="h-4 w-4 text-white" />
                 </div>
-                <span className="text-sm font-medium">{authState.user?.name}</span>
+                <span className="text-sm font-medium">
+                  {authState.user?.name}
+                </span>
               </button>
 
               {isProfileMenuOpen && (
@@ -106,7 +110,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -115,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden border-t border-gray-200 bg-white"
           >
@@ -129,8 +137,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
                   }}
                   className={`block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-colors ${
                     currentView === item.id
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   }`}
                 >
                   <span className="mr-2">{item.icon}</span>
@@ -142,7 +150,9 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
                     <User className="h-4 w-4 text-white" />
                   </div>
-                  <span className="ml-3 text-sm font-medium text-gray-900">{authState.user?.name}</span>
+                  <span className="ml-3 text-sm font-medium text-gray-900">
+                    {authState.user?.name}
+                  </span>
                 </div>
                 <button
                   onClick={handleLogout}
@@ -158,9 +168,9 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
       </div>
 
       {/* Profile Modal */}
-      <ProfileModal 
-        isOpen={showProfileModal} 
-        onClose={() => setShowProfileModal(false)} 
+      <ProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
       />
     </header>
   );

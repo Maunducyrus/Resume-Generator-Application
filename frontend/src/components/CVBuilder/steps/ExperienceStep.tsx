@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Briefcase, Sparkles } from 'lucide-react';
-import { useCV } from '../../../context/CVContext';
-import { useAuth } from '../../../context/AuthContext';
-import { aiAPI } from '../../../services/api';
-import type { WorkExperience } from '../../../types';
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { Plus, Trash2, Briefcase, Sparkles } from "lucide-react";
+import { useCV } from "../../../context/CVContext";
+import { useAuth } from "../../../context/AuthContext";
+import { aiAPI } from "../../../services/api";
+import type { WorkExperience } from "../../../types";
+import toast from "react-hot-toast";
 
 const ExperienceStep: React.FC = () => {
   const { state: cvState, setCurrentCV } = useCV();
@@ -17,32 +17,36 @@ const ExperienceStep: React.FC = () => {
   const addExperience = () => {
     const newExperience: WorkExperience = {
       id: Date.now().toString(),
-      company: '',
-      position: '',
-      startDate: '',
-      endDate: '',
+      company: "",
+      position: "",
+      startDate: "",
+      endDate: "",
       current: false,
-      location: '',
-      responsibilities: [''],
-      achievements: []
+      location: "",
+      responsibilities: [""],
+      achievements: [],
     };
 
     const updatedCV = {
       ...cvState.currentCV,
-      workExperience: [...workExperience, newExperience]
+      workExperience: [...workExperience, newExperience],
     };
     setCurrentCV(updatedCV as any);
     setEditingIndex(workExperience.length);
   };
 
-  const updateExperience = (index: number, field: keyof WorkExperience, value: any) => {
-    const updatedExperience = workExperience.map((exp, i) => 
-      i === index ? { ...exp, [field]: value } : exp
+  const updateExperience = (
+    index: number,
+    field: keyof WorkExperience,
+    value: any,
+  ) => {
+    const updatedExperience = workExperience.map((exp, i) =>
+      i === index ? { ...exp, [field]: value } : exp,
     );
-    
+
     const updatedCV = {
       ...cvState.currentCV,
-      workExperience: updatedExperience
+      workExperience: updatedExperience,
     };
     setCurrentCV(updatedCV as any);
   };
@@ -51,7 +55,7 @@ const ExperienceStep: React.FC = () => {
     const updatedExperience = workExperience.filter((_, i) => i !== index);
     const updatedCV = {
       ...cvState.currentCV,
-      workExperience: updatedExperience
+      workExperience: updatedExperience,
     };
     setCurrentCV(updatedCV as any);
     setEditingIndex(null);
@@ -59,27 +63,36 @@ const ExperienceStep: React.FC = () => {
 
   const addResponsibility = (expIndex: number) => {
     const experience = workExperience[expIndex];
-    updateExperience(expIndex, 'responsibilities', [...experience.responsibilities, '']);
+    updateExperience(expIndex, "responsibilities", [
+      ...experience.responsibilities,
+      "",
+    ]);
   };
 
-  const updateResponsibility = (expIndex: number, respIndex: number, value: string) => {
+  const updateResponsibility = (
+    expIndex: number,
+    respIndex: number,
+    value: string,
+  ) => {
     const experience = workExperience[expIndex];
-    const updatedResponsibilities = experience.responsibilities.map((resp, i) => 
-      i === respIndex ? value : resp
+    const updatedResponsibilities = experience.responsibilities.map(
+      (resp, i) => (i === respIndex ? value : resp),
     );
-    updateExperience(expIndex, 'responsibilities', updatedResponsibilities);
+    updateExperience(expIndex, "responsibilities", updatedResponsibilities);
   };
 
   const removeResponsibility = (expIndex: number, respIndex: number) => {
     const experience = workExperience[expIndex];
-    const updatedResponsibilities = experience.responsibilities.filter((_, i) => i !== respIndex);
-    updateExperience(expIndex, 'responsibilities', updatedResponsibilities);
+    const updatedResponsibilities = experience.responsibilities.filter(
+      (_, i) => i !== respIndex,
+    );
+    updateExperience(expIndex, "responsibilities", updatedResponsibilities);
   };
 
   const optimizeExperience = async (index: number) => {
     const experience = workExperience[index];
     if (!experience.company || !experience.position) {
-      toast.error('Please fill in company and position first');
+      toast.error("Please fill in company and position first");
       return;
     }
 
@@ -87,15 +100,19 @@ const ExperienceStep: React.FC = () => {
     try {
       const optimized = await aiAPI.optimizeExperience({
         experience,
-        profession: authState.user?.profession || 'Professional'
+        profession: authState.user?.profession || "Professional",
       });
 
-      updateExperience(index, 'responsibilities', optimized.responsibilities || experience.responsibilities);
-      updateExperience(index, 'achievements', optimized.achievements || []);
-      
-      toast.success('Experience optimized with AI!');
+      updateExperience(
+        index,
+        "responsibilities",
+        optimized.responsibilities || experience.responsibilities,
+      );
+      updateExperience(index, "achievements", optimized.achievements || []);
+
+      toast.success("Experience optimized with AI!");
     } catch (error) {
-      toast.error('Failed to optimize experience');
+      toast.error("Failed to optimize experience");
     } finally {
       setOptimizingIndex(null);
     }
@@ -104,9 +121,12 @@ const ExperienceStep: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Work Experience</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Work Experience
+        </h3>
         <p className="text-gray-600 mb-6">
-          Add your professional work experience, including internships and relevant positions.
+          Add your professional work experience, including internships and
+          relevant positions.
         </p>
       </div>
 
@@ -117,7 +137,7 @@ const ExperienceStep: React.FC = () => {
               <div className="flex items-center">
                 <Briefcase className="h-5 w-5 text-blue-600 mr-2" />
                 <h4 className="font-medium text-gray-900">
-                  {exp.position || 'New Experience Entry'}
+                  {exp.position || "New Experience Entry"}
                 </h4>
               </div>
               <div className="flex items-center space-x-2">
@@ -128,14 +148,18 @@ const ExperienceStep: React.FC = () => {
                     className="flex items-center text-purple-600 hover:text-purple-700 text-sm font-medium disabled:opacity-50"
                   >
                     <Sparkles className="h-4 w-4 mr-1" />
-                    {optimizingIndex === index ? 'Optimizing...' : 'AI Optimize'}
+                    {optimizingIndex === index
+                      ? "Optimizing..."
+                      : "AI Optimize"}
                   </button>
                 )}
                 <button
-                  onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                  onClick={() =>
+                    setEditingIndex(editingIndex === index ? null : index)
+                  }
                   className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                 >
-                  {editingIndex === index ? 'Collapse' : 'Edit'}
+                  {editingIndex === index ? "Collapse" : "Edit"}
                 </button>
                 <button
                   onClick={() => removeExperience(index)}
@@ -157,7 +181,9 @@ const ExperienceStep: React.FC = () => {
                     <input
                       type="text"
                       value={exp.company}
-                      onChange={(e) => updateExperience(index, 'company', e.target.value)}
+                      onChange={(e) =>
+                        updateExperience(index, "company", e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Google Inc."
                     />
@@ -170,7 +196,9 @@ const ExperienceStep: React.FC = () => {
                     <input
                       type="text"
                       value={exp.position}
-                      onChange={(e) => updateExperience(index, 'position', e.target.value)}
+                      onChange={(e) =>
+                        updateExperience(index, "position", e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Software Engineer"
                     />
@@ -183,7 +211,9 @@ const ExperienceStep: React.FC = () => {
                     <input
                       type="text"
                       value={exp.location}
-                      onChange={(e) => updateExperience(index, 'location', e.target.value)}
+                      onChange={(e) =>
+                        updateExperience(index, "location", e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="San Francisco, CA"
                     />
@@ -201,8 +231,8 @@ const ExperienceStep: React.FC = () => {
                     />
                   </div> */}
                   <div>
-                    <label 
-                      htmlFor={`exp-startDate-${index}`} 
+                    <label
+                      htmlFor={`exp-startDate-${index}`}
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
                       Start Date
@@ -211,11 +241,13 @@ const ExperienceStep: React.FC = () => {
                       id={`exp-startDate-${index}`}
                       type="month"
                       value={exp.startDate}
-                      onChange={(e) => updateExperience(index, 'startDate', e.target.value)}
+                      onChange={(e) =>
+                        updateExperience(index, "startDate", e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       aria-label="Experience start date"
                     />
-                  </div>                  
+                  </div>
 
                   {/* <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -230,8 +262,8 @@ const ExperienceStep: React.FC = () => {
                     />
                   </div> */}
                   <div>
-                    <label 
-                      htmlFor={`exp-endDate-${index}`} 
+                    <label
+                      htmlFor={`exp-endDate-${index}`}
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
                       End Date
@@ -240,7 +272,9 @@ const ExperienceStep: React.FC = () => {
                       id={`exp-endDate-${index}`}
                       type="month"
                       value={exp.endDate}
-                      onChange={(e) => updateExperience(index, 'endDate', e.target.value)}
+                      onChange={(e) =>
+                        updateExperience(index, "endDate", e.target.value)
+                      }
                       disabled={exp.current}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                       aria-label="Experience end date"
@@ -253,14 +287,17 @@ const ExperienceStep: React.FC = () => {
                       id={`current-${index}`}
                       checked={exp.current}
                       onChange={(e) => {
-                        updateExperience(index, 'current', e.target.checked);
+                        updateExperience(index, "current", e.target.checked);
                         if (e.target.checked) {
-                          updateExperience(index, 'endDate', '');
+                          updateExperience(index, "endDate", "");
                         }
                       }}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
-                    <label htmlFor={`current-${index}`} className="ml-2 text-sm text-gray-700">
+                    <label
+                      htmlFor={`current-${index}`}
+                      className="ml-2 text-sm text-gray-700"
+                    >
                       I currently work here
                     </label>
                   </div>
@@ -271,11 +308,16 @@ const ExperienceStep: React.FC = () => {
                     Responsibilities & Achievements
                   </label>
                   {exp.responsibilities.map((resp, respIndex) => (
-                    <div key={respIndex} className="flex items-center space-x-2 mb-2">
+                    <div
+                      key={respIndex}
+                      className="flex items-center space-x-2 mb-2"
+                    >
                       <input
                         type="text"
                         value={resp}
-                        onChange={(e) => updateResponsibility(index, respIndex, e.target.value)}
+                        onChange={(e) =>
+                          updateResponsibility(index, respIndex, e.target.value)
+                        }
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="Describe your responsibility or achievement..."
                       />
@@ -305,9 +347,14 @@ const ExperienceStep: React.FC = () => {
                     </label>
                     <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                       {exp.achievements.map((achievement, achIndex) => (
-                        <div key={achIndex} className="flex items-start space-x-2 mb-1 last:mb-0">
+                        <div
+                          key={achIndex}
+                          className="flex items-start space-x-2 mb-1 last:mb-0"
+                        >
                           <span className="text-green-600 mt-1">•</span>
-                          <span className="text-green-800 text-sm">{achievement}</span>
+                          <span className="text-green-800 text-sm">
+                            {achievement}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -319,9 +366,13 @@ const ExperienceStep: React.FC = () => {
             {editingIndex !== index && exp.company && (
               <div className="text-sm text-gray-600">
                 <p className="font-medium">{exp.position}</p>
-                <p>{exp.company} • {exp.location}</p>
+                <p>
+                  {exp.company} • {exp.location}
+                </p>
                 {exp.startDate && (
-                  <p>{exp.startDate} - {exp.current ? 'Present' : exp.endDate}</p>
+                  <p>
+                    {exp.startDate} - {exp.current ? "Present" : exp.endDate}
+                  </p>
                 )}
                 {exp.responsibilities.length > 0 && (
                   <ul className="mt-2 space-y-1">

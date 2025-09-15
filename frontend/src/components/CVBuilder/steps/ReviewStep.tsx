@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { CheckCircle, AlertCircle, Sparkles, Star } from 'lucide-react';
-import { useCV } from '../../../context/CVContext';
-import { useAuth } from '../../../context/AuthContext';
-import { aiAPI } from '../../../services/api';
-import type { ATSResult } from '../../../types';
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { CheckCircle, AlertCircle, Sparkles, Star } from "lucide-react";
+import { useCV } from "../../../context/CVContext";
+import { useAuth } from "../../../context/AuthContext";
+import { aiAPI } from "../../../services/api";
+import type { ATSResult } from "../../../types";
+import toast from "react-hot-toast";
 
 const ReviewStep: React.FC = () => {
   const { state: cvState } = useCV();
@@ -19,11 +19,11 @@ const ReviewStep: React.FC = () => {
     try {
       const result = await aiAPI.calculateATSScore({
         cvData: cvState.currentCV,
-        profession: authState.user?.profession || 'Professional'
+        profession: authState.user?.profession || "Professional",
       });
       setAtsResult(result);
     } catch (error) {
-      toast.error('Failed to calculate ATS score');
+      toast.error("Failed to calculate ATS score");
     } finally {
       setIsCalculating(false);
     }
@@ -34,69 +34,80 @@ const ReviewStep: React.FC = () => {
 
     const sections = [
       {
-        name: 'Personal Information',
-        completed: !!(cvState.currentCV.personalInfo?.fullName && cvState.currentCV.personalInfo?.email),
-        required: true
+        name: "Personal Information",
+        completed: !!(
+          cvState.currentCV.personalInfo?.fullName &&
+          cvState.currentCV.personalInfo?.email
+        ),
+        required: true,
       },
       {
-        name: 'Education',
+        name: "Education",
         completed: cvState.currentCV.education.length > 0,
-        required: true
+        required: true,
       },
       {
-        name: 'Work Experience',
+        name: "Work Experience",
         completed: cvState.currentCV.workExperience.length > 0,
-        required: true
+        required: true,
       },
       {
-        name: 'Skills',
+        name: "Skills",
         completed: cvState.currentCV.skills.length > 0,
-        required: true
+        required: true,
       },
       {
-        name: 'Projects',
+        name: "Projects",
         completed: cvState.currentCV.projects.length > 0,
-        required: false
+        required: false,
       },
       {
-        name: 'Professional Summary',
-        completed: !!(cvState.currentCV.personalInfo?.summary && cvState.currentCV.personalInfo.summary.length > 50),
-        required: false
-      }
+        name: "Professional Summary",
+        completed: !!(
+          cvState.currentCV.personalInfo?.summary &&
+          cvState.currentCV.personalInfo.summary.length > 50
+        ),
+        required: false,
+      },
     ];
 
-    const requiredSections = sections.filter(s => s.required);
-    const completedRequired = requiredSections.filter(s => s.completed).length;
+    const requiredSections = sections.filter((s) => s.required);
+    const completedRequired = requiredSections.filter(
+      (s) => s.completed,
+    ).length;
     const totalRequired = requiredSections.length;
 
     return {
       completed: completedRequired,
       total: totalRequired,
       sections,
-      isComplete: completedRequired === totalRequired
+      isComplete: completedRequired === totalRequired,
     };
   };
 
   const status = getCompletionStatus();
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getScoreBg = (score: number) => {
-    if (score >= 80) return 'bg-green-100';
-    if (score >= 60) return 'bg-yellow-100';
-    return 'bg-red-100';
+    if (score >= 80) return "bg-green-100";
+    if (score >= 60) return "bg-yellow-100";
+    return "bg-red-100";
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Review Your CV</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Review Your CV
+        </h3>
         <p className="text-gray-600 mb-6">
-          Review your CV for completeness and get an ATS compatibility score to improve your chances of getting hired.
+          Review your CV for completeness and get an ATS compatibility score to
+          improve your chances of getting hired.
         </p>
       </div>
 
@@ -125,7 +136,9 @@ const ReviewStep: React.FC = () => {
                 ) : (
                   <div className="h-4 w-4 border-2 border-gray-300 rounded-full mr-3" />
                 )}
-                <span className={`text-sm ${section.completed ? 'text-gray-900' : 'text-gray-500'}`}>
+                <span
+                  className={`text-sm ${section.completed ? "text-gray-900" : "text-gray-500"}`}
+                >
                   {section.name}
                 </span>
               </div>
@@ -133,12 +146,14 @@ const ReviewStep: React.FC = () => {
                 {!section.required && (
                   <span className="text-xs text-gray-500 mr-2">Optional</span>
                 )}
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  section.completed 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {section.completed ? 'Complete' : 'Incomplete'}
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    section.completed
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {section.completed ? "Complete" : "Incomplete"}
                 </span>
               </div>
             </div>
@@ -164,16 +179,20 @@ const ReviewStep: React.FC = () => {
             className="flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
           >
             <Sparkles className="h-4 w-4 mr-2" />
-            {isCalculating ? 'Calculating...' : 'Calculate Score'}
+            {isCalculating ? "Calculating..." : "Calculate Score"}
           </button>
         </div>
 
         {atsResult ? (
           <div className="space-y-4">
             <div className="flex items-center justify-center">
-              <div className={`w-24 h-24 rounded-full flex items-center justify-center ${getScoreBg(atsResult.score)}`}>
+              <div
+                className={`w-24 h-24 rounded-full flex items-center justify-center ${getScoreBg(atsResult.score)}`}
+              >
                 <div className="text-center">
-                  <div className={`text-2xl font-bold ${getScoreColor(atsResult.score)}`}>
+                  <div
+                    className={`text-2xl font-bold ${getScoreColor(atsResult.score)}`}
+                  >
                     {atsResult.score}
                   </div>
                   <div className="text-xs text-gray-600">ATS Score</div>
@@ -188,27 +207,35 @@ const ReviewStep: React.FC = () => {
                     key={i}
                     className={`h-5 w-5 ${
                       i < Math.floor(atsResult.score / 20)
-                        ? 'text-yellow-400 fill-current'
-                        : 'text-gray-300'
+                        ? "text-yellow-400 fill-current"
+                        : "text-gray-300"
                     }`}
                   />
                 ))}
               </div>
               <p className="text-sm text-gray-600">
-                {atsResult.score >= 80 && 'Excellent! Your CV is highly ATS-compatible.'}
-                {atsResult.score >= 60 && atsResult.score < 80 && 'Good! Your CV has decent ATS compatibility.'}
-                {atsResult.score < 60 && 'Needs improvement. Follow the suggestions below.'}
+                {atsResult.score >= 80 &&
+                  "Excellent! Your CV is highly ATS-compatible."}
+                {atsResult.score >= 60 &&
+                  atsResult.score < 80 &&
+                  "Good! Your CV has decent ATS compatibility."}
+                {atsResult.score < 60 &&
+                  "Needs improvement. Follow the suggestions below."}
               </p>
             </div>
 
             {atsResult.suggestions.length > 0 && (
               <div>
-                <h5 className="font-medium text-gray-900 mb-2">Improvement Suggestions:</h5>
+                <h5 className="font-medium text-gray-900 mb-2">
+                  Improvement Suggestions:
+                </h5>
                 <ul className="space-y-2">
                   {atsResult.suggestions.map((suggestion, index) => (
                     <li key={index} className="flex items-start">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0" />
-                      <span className="text-sm text-gray-700">{suggestion}</span>
+                      <span className="text-sm text-gray-700">
+                        {suggestion}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -219,10 +246,9 @@ const ReviewStep: React.FC = () => {
           <div className="text-center py-8">
             <Star className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600">
-              {status.isComplete 
+              {status.isComplete
                 ? 'Click "Calculate Score" to get your ATS compatibility score'
-                : 'Complete all required sections to calculate your ATS score'
-              }
+                : "Complete all required sections to calculate your ATS score"}
             </p>
           </div>
         )}

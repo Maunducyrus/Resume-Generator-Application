@@ -1,6 +1,13 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FileText, Zap, CheckCircle, Users, Star, ArrowRight } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  FileText,
+  Zap,
+  CheckCircle,
+  Users,
+  Star,
+  ArrowRight,
+} from "lucide-react";
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -11,45 +18,52 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
   const features = [
     {
       icon: <Zap className="h-8 w-8 text-blue-600" />,
-      title: 'AI-Powered Content',
-      description: 'Generate professional summaries, optimize experience descriptions, and create compelling cover letters with OpenAI GPT-4.'
+      title: "AI-Powered Content",
+      description:
+        "Generate professional summaries, optimize experience descriptions, and create compelling cover letters with OpenAI GPT-4.",
     },
     {
       icon: <CheckCircle className="h-8 w-8 text-green-600" />,
-      title: 'ATS Optimization',
-      description: 'Ensure your CV passes Applicant Tracking Systems with our AI-powered ATS score analysis and optimization suggestions.'
+      title: "ATS Optimization",
+      description:
+        "Ensure your CV passes Applicant Tracking Systems with our AI-powered ATS score analysis and optimization suggestions.",
     },
     {
       icon: <FileText className="h-8 w-8 text-purple-600" />,
-      title: 'Professional Templates',
-      description: 'Choose from 16+ industry-specific templates designed by professionals for maximum impact.'
+      title: "Professional Templates",
+      description:
+        "Choose from 16+ industry-specific templates designed by professionals for maximum impact.",
     },
     {
       icon: <Users className="h-8 w-8 text-orange-600" />,
-      title: 'Interview Preparation',
-      description: 'Get profession-specific interview questions and preparation tips powered by AI.'
-    }
+      title: "Interview Preparation",
+      description:
+        "Get profession-specific interview questions and preparation tips powered by AI.",
+    },
   ];
 
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      role: 'Software Engineer',
-      content: 'This AI CV builder helped me land my dream job at a top tech company. The ATS optimization was game-changing!',
-      rating: 5
+      name: "Sarah Johnson",
+      role: "Software Engineer",
+      content:
+        "This AI CV builder helped me land my dream job at a top tech company. The ATS optimization was game-changing!",
+      rating: 5,
     },
     {
-      name: 'Michael Chen',
-      role: 'Marketing Manager',
-      content: 'The AI-generated cover letters are incredibly professional. Saved me hours of writing and got better results.',
-      rating: 5
+      name: "Michael Chen",
+      role: "Marketing Manager",
+      content:
+        "The AI-generated cover letters are incredibly professional. Saved me hours of writing and got better results.",
+      rating: 5,
     },
     {
-      name: 'Emily Rodriguez',
-      role: 'Data Scientist',
-      content: 'The profession-specific templates and AI optimization helped me stand out in a competitive field.',
-      rating: 5
-    }
+      name: "Emily Rodriguez",
+      role: "Data Scientist",
+      content:
+        "The profession-specific templates and AI optimization helped me stand out in a competitive field.",
+      rating: 5,
+    },
   ];
 
   return (
@@ -62,7 +76,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
                 <FileText className="h-6 w-6 text-white" />
               </div>
-              <span className="ml-3 text-xl font-bold text-gray-900">AI CV Builder</span>
+              <span className="ml-3 text-xl font-bold text-gray-900">
+                AI CV Builder
+              </span>
             </div>
             <div className="flex items-center space-x-4">
               <button
@@ -92,14 +108,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               transition={{ duration: 0.6 }}
             >
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Build Your Perfect CV with{' '}
+                Build Your Perfect CV with{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   AI Power
                 </span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Create professional, ATS-optimized resumes in minutes. Generate compelling content, 
-                optimize for specific jobs, and prepare for interviews with advanced AI assistance.
+                Create professional, ATS-optimized resumes in minutes. Generate
+                compelling content, optimize for specific jobs, and prepare for
+                interviews with advanced AI assistance.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
@@ -110,7 +127,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() =>
+                    document
+                      .getElementById("features")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
                   className="border-2 border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200"
                 >
                   Learn More
@@ -132,7 +153,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               Everything you need to create a standout CV that gets you hired
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <motion.div
@@ -142,9 +163,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="text-center p-6 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
               >
-                <div className="flex justify-center mb-4">
-                  {feature.icon}
-                </div>
+                <div className="flex justify-center mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
                   {feature.title}
                 </h3>
@@ -168,7 +187,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               See what our users say about their success
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <motion.div
@@ -180,14 +199,19 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               >
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    <Star
+                      key={i}
+                      className="h-5 w-5 text-yellow-400 fill-current"
+                    />
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4 italic">
                   "{testimonial.content}"
                 </p>
                 <div>
-                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                  <p className="font-semibold text-gray-900">
+                    {testimonial.name}
+                  </p>
                   <p className="text-gray-500 text-sm">{testimonial.role}</p>
                 </div>
               </motion.div>
@@ -208,7 +232,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               Ready to Build Your Perfect CV?
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Join thousands of professionals who've landed their dream jobs with our AI-powered CV builder.
+              Join thousands of professionals who've landed their dream jobs
+              with our AI-powered CV builder.
             </p>
             <button
               onClick={onGetStarted}
@@ -217,7 +242,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
               Start Building Now - It's Free
             </button>
             <p className="text-blue-100 text-sm mt-4">
-              No credit card required • Create unlimited CVs • AI-powered features included
+              No credit card required • Create unlimited CVs • AI-powered
+              features included
             </p>
           </motion.div>
         </div>
@@ -235,7 +261,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLogin }) => {
                 <span className="ml-3 text-xl font-bold">AI CV Builder</span>
               </div>
               <p className="text-gray-400 mb-4 max-w-md">
-                The most advanced AI-powered CV builder. Create professional resumes that get you hired.
+                The most advanced AI-powered CV builder. Create professional
+                resumes that get you hired.
               </p>
             </div>
             <div>

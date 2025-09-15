@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, User, Briefcase, Chrome } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Mail, Lock, User, Briefcase, Chrome } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -11,10 +11,10 @@ interface AuthModalProps {
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    profession: ''
+    name: "",
+    email: "",
+    password: "",
+    profession: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -26,27 +26,32 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       // Simulate Google OAuth flow
       // In production, you would integrate with Google OAuth
       const mockGoogleUser = {
-        name: 'Google User',
-        email: 'user@gmail.com',
-        password: 'google-oauth-' + Date.now(),
-        profession: 'Professional'
+        name: "Google User",
+        email: "user@gmail.com",
+        password: "google-oauth-" + Date.now(),
+        profession: "Professional",
       };
-      
+
       // Try to register first, if user exists, login
       try {
-        await register(mockGoogleUser.name, mockGoogleUser.email, mockGoogleUser.password, mockGoogleUser.profession);
+        await register(
+          mockGoogleUser.name,
+          mockGoogleUser.email,
+          mockGoogleUser.password,
+          mockGoogleUser.profession,
+        );
       } catch (error: any) {
-        if (error.message.includes('already exists')) {
+        if (error.message.includes("already exists")) {
           await login(mockGoogleUser.email, mockGoogleUser.password);
         } else {
           throw error;
         }
       }
-      
+
       onClose();
-      setFormData({ name: '', email: '', password: '', profession: '' });
+      setFormData({ name: "", email: "", password: "", profession: "" });
     } catch (error) {
-      console.error('Google sign-in error:', error);
+      console.error("Google sign-in error:", error);
     } finally {
       setIsGoogleLoading(false);
     }
@@ -60,30 +65,52 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       if (isLogin) {
         await login(formData.email, formData.password);
       } else {
-        await register(formData.name, formData.email, formData.password, formData.profession);
+        await register(
+          formData.name,
+          formData.email,
+          formData.password,
+          formData.profession,
+        );
       }
       onClose();
-      setFormData({ name: '', email: '', password: '', profession: '' });
+      setFormData({ name: "", email: "", password: "", profession: "" });
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error("Auth error:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      
-      [e.target.name]: e.target.value
+
+      [e.target.name]: e.target.value,
     }));
   };
 
   const professions = [
-    'Software Engineer', 'Data Scientist', 'Product Manager', 'Designer',
-    'Marketing Manager', 'Sales Representative', 'Consultant', 'Analyst',
-    'Manager', 'Director', 'Teacher', 'Nurse', 'Doctor', 'Lawyer',
-    'Accountant', 'Engineer', 'Researcher', 'Writer', 'Other'
+    "Software Engineer",
+    "Data Scientist",
+    "Product Manager",
+    "Designer",
+    "Marketing Manager",
+    "Sales Representative",
+    "Consultant",
+    "Analyst",
+    "Manager",
+    "Director",
+    "Teacher",
+    "Nurse",
+    "Doctor",
+    "Lawyer",
+    "Accountant",
+    "Engineer",
+    "Researcher",
+    "Writer",
+    "Other",
   ];
 
   return (
@@ -98,7 +125,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               className="fixed inset-0 bg-black bg-opacity-50"
               onClick={onClose}
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -107,10 +134,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             >
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {isLogin ? 'Welcome Back' : 'Create Account'}
+                  {isLogin ? "Welcome Back" : "Create Account"}
                 </h2>
                 <button
-                  type='button'
+                  type="button"
                   aria-label="Close modal"
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -155,8 +182,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                           title="Select your profession from the list"
                         >
                           <option value="">Select your profession</option>
-                          {professions.map(profession => (
-                            <option key={profession} value={profession}>{profession}</option>
+                          {professions.map((profession) => (
+                            <option key={profession} value={profession}>
+                              {profession}
+                            </option>
                           ))}
                         </select>
                       </div>
@@ -208,10 +237,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   {isLoading ? (
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      {isLogin ? 'Signing In...' : 'Creating Account...'}
+                      {isLogin ? "Signing In..." : "Creating Account..."}
                     </div>
+                  ) : isLogin ? (
+                    "Sign In"
                   ) : (
-                    isLogin ? 'Sign In' : 'Create Account'
+                    "Create Account"
                   )}
                 </button>
               </form>
@@ -223,7 +254,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     <div className="w-full border-t border-gray-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-white text-gray-500">
+                      Or continue with
+                    </span>
                   </div>
                 </div>
 
@@ -234,19 +267,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 >
                   <Chrome className="h-5 w-5 text-red-500 mr-3" />
                   <span className="text-gray-700 font-medium">
-                    {isGoogleLoading ? 'Signing in...' : `${isLogin ? 'Sign in' : 'Sign up'} with Google`}
+                    {isGoogleLoading
+                      ? "Signing in..."
+                      : `${isLogin ? "Sign in" : "Sign up"} with Google`}
                   </span>
                 </button>
               </div>
 
               <div className="mt-6 text-center">
                 <p className="text-gray-600">
-                  {isLogin ? "Don't have an account?" : "Already have an account?"}
+                  {isLogin
+                    ? "Don't have an account?"
+                    : "Already have an account?"}
                   <button
                     onClick={() => setIsLogin(!isLogin)}
                     className="ml-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
                   >
-                    {isLogin ? 'Sign Up' : 'Sign In'}
+                    {isLogin ? "Sign Up" : "Sign In"}
                   </button>
                 </p>
               </div>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Award, ExternalLink, Github } from 'lucide-react';
-import { useCV } from '../../../context/CVContext';
-import type { Project } from '../../../types';
+import React, { useState } from "react";
+import { Plus, Trash2, Award, ExternalLink, Github } from "lucide-react";
+import { useCV } from "../../../context/CVContext";
+import type { Project } from "../../../types";
 
 const ProjectsStep: React.FC = () => {
   const { state: cvState, setCurrentCV } = useCV();
@@ -12,31 +12,31 @@ const ProjectsStep: React.FC = () => {
   const addProject = () => {
     const newProject: Project = {
       id: Date.now().toString(),
-      name: '',
-      description: '',
+      name: "",
+      description: "",
       technologies: [],
-      url: '',
-      github: '',
-      startDate: '',
-      endDate: ''
+      url: "",
+      github: "",
+      startDate: "",
+      endDate: "",
     };
 
     const updatedCV = {
       ...cvState.currentCV,
-      projects: [...projects, newProject]
+      projects: [...projects, newProject],
     };
     setCurrentCV(updatedCV as any);
     setEditingIndex(projects.length);
   };
 
   const updateProject = (index: number, field: keyof Project, value: any) => {
-    const updatedProjects = projects.map((project, i) => 
-      i === index ? { ...project, [field]: value } : project
+    const updatedProjects = projects.map((project, i) =>
+      i === index ? { ...project, [field]: value } : project,
     );
-    
+
     const updatedCV = {
       ...cvState.currentCV,
-      projects: updatedProjects
+      projects: updatedProjects,
     };
     setCurrentCV(updatedCV as any);
   };
@@ -45,7 +45,7 @@ const ProjectsStep: React.FC = () => {
     const updatedProjects = projects.filter((_, i) => i !== index);
     const updatedCV = {
       ...cvState.currentCV,
-      projects: updatedProjects
+      projects: updatedProjects,
     };
     setCurrentCV(updatedCV as any);
     setEditingIndex(null);
@@ -53,16 +53,18 @@ const ProjectsStep: React.FC = () => {
 
   const addTechnology = (projectIndex: number, technology: string) => {
     if (!technology.trim()) return;
-    
+
     const project = projects[projectIndex];
     const updatedTechnologies = [...project.technologies, technology.trim()];
-    updateProject(projectIndex, 'technologies', updatedTechnologies);
+    updateProject(projectIndex, "technologies", updatedTechnologies);
   };
 
   const removeTechnology = (projectIndex: number, techIndex: number) => {
     const project = projects[projectIndex];
-    const updatedTechnologies = project.technologies.filter((_, i) => i !== techIndex);
-    updateProject(projectIndex, 'technologies', updatedTechnologies);
+    const updatedTechnologies = project.technologies.filter(
+      (_, i) => i !== techIndex,
+    );
+    updateProject(projectIndex, "technologies", updatedTechnologies);
   };
 
   return (
@@ -70,7 +72,8 @@ const ProjectsStep: React.FC = () => {
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Projects</h3>
         <p className="text-gray-600 mb-6">
-          Showcase your personal projects, open-source contributions, and side projects that demonstrate your skills.
+          Showcase your personal projects, open-source contributions, and side
+          projects that demonstrate your skills.
         </p>
       </div>
 
@@ -81,20 +84,22 @@ const ProjectsStep: React.FC = () => {
               <div className="flex items-center">
                 <Award className="h-5 w-5 text-blue-600 mr-2" />
                 <h4 className="font-medium text-gray-900">
-                  {project.name || 'New Project'}
+                  {project.name || "New Project"}
                 </h4>
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                  onClick={() =>
+                    setEditingIndex(editingIndex === index ? null : index)
+                  }
                   className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                 >
-                  {editingIndex === index ? 'Collapse' : 'Edit'}
+                  {editingIndex === index ? "Collapse" : "Edit"}
                 </button>
                 <button
                   onClick={() => removeProject(index)}
                   className="text-red-600 hover:text-red-700"
-                  title='Remove Project'
+                  title="Remove Project"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -111,7 +116,9 @@ const ProjectsStep: React.FC = () => {
                     <input
                       type="text"
                       value={project.name}
-                      onChange={(e) => updateProject(index, 'name', e.target.value)}
+                      onChange={(e) =>
+                        updateProject(index, "name", e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="E-commerce Website"
                     />
@@ -126,7 +133,9 @@ const ProjectsStep: React.FC = () => {
                       <input
                         type="url"
                         value={project.url}
-                        onChange={(e) => updateProject(index, 'url', e.target.value)}
+                        onChange={(e) =>
+                          updateProject(index, "url", e.target.value)
+                        }
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="https://myproject.com"
                       />
@@ -142,7 +151,9 @@ const ProjectsStep: React.FC = () => {
                       <input
                         type="url"
                         value={project.github}
-                        onChange={(e) => updateProject(index, 'github', e.target.value)}
+                        onChange={(e) =>
+                          updateProject(index, "github", e.target.value)
+                        }
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="https://github.com/username/project"
                       />
@@ -160,22 +171,24 @@ const ProjectsStep: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div> */}
-                <div>
-                  <label 
-                    htmlFor={`project-startDate-${index}`} 
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Start Date
-                  </label>
-                  <input
-                    id={`project-startDate-${index}`}
-                    type="month"
-                    value={project.startDate}
-                    onChange={(e) => updateProject(index, 'startDate', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    aria-label="Project start date"
-                  />
-                </div>
+                  <div>
+                    <label
+                      htmlFor={`project-startDate-${index}`}
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Start Date
+                    </label>
+                    <input
+                      id={`project-startDate-${index}`}
+                      type="month"
+                      value={project.startDate}
+                      onChange={(e) =>
+                        updateProject(index, "startDate", e.target.value)
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="Project start date"
+                    />
+                  </div>
 
                   {/* <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -188,22 +201,24 @@ const ProjectsStep: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div> */}
-                    <div>
-                      <label 
-                        htmlFor={`project-endDate-${index}`} 
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        End Date (Optional)
-                      </label>
-                      <input
-                        id={`project-endDate-${index}`}
-                        type="month"
-                        value={project.endDate}
-                        onChange={(e) => updateProject(index, 'endDate', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        aria-label="Project end date (optional)"
-                      />
-                    </div>              
+                  <div>
+                    <label
+                      htmlFor={`project-endDate-${index}`}
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      End Date (Optional)
+                    </label>
+                    <input
+                      id={`project-endDate-${index}`}
+                      type="month"
+                      value={project.endDate}
+                      onChange={(e) =>
+                        updateProject(index, "endDate", e.target.value)
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="Project end date (optional)"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -212,7 +227,9 @@ const ProjectsStep: React.FC = () => {
                   </label>
                   <textarea
                     value={project.description}
-                    onChange={(e) => updateProject(index, 'description', e.target.value)}
+                    onChange={(e) =>
+                      updateProject(index, "description", e.target.value)
+                    }
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Describe what the project does, your role, and key achievements..."
@@ -245,17 +262,18 @@ const ProjectsStep: React.FC = () => {
                       placeholder="Add technology (e.g., React, Node.js)"
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === "Enter") {
                           addTechnology(index, e.currentTarget.value);
-                          e.currentTarget.value = '';
+                          e.currentTarget.value = "";
                         }
                       }}
                     />
                     <button
                       onClick={(e) => {
-                        const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                        const input = e.currentTarget
+                          .previousElementSibling as HTMLInputElement;
                         addTechnology(index, input.value);
-                        input.value = '';
+                        input.value = "";
                       }}
                       className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
                     >
@@ -273,7 +291,10 @@ const ProjectsStep: React.FC = () => {
                 {project.technologies.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
                     {project.technologies.map((tech, i) => (
-                      <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                      <span
+                        key={i}
+                        className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -320,7 +341,9 @@ const ProjectsStep: React.FC = () => {
       {projects.length === 0 && (
         <div className="text-center py-8">
           <Award className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No projects added yet</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No projects added yet
+          </h3>
           <p className="text-gray-600 mb-4">
             Projects are optional but highly recommended to showcase your skills
           </p>

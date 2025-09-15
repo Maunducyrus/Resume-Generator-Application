@@ -45,8 +45,8 @@ export interface WorkExperience {
 export interface Skill {
   id: string;
   name: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
-  category: 'Technical' | 'Soft' | 'Language' | 'Other';
+  level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+  category: "Technical" | "Soft" | "Language" | "Other";
 }
 
 export interface Project {

@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { OpenAIService } from '../services/openaiService';
-import { logger } from '../utils/logger';
+import { Request, Response } from "express";
+import { OpenAIService } from "../services/openaiService";
+import { logger } from "../utils/logger";
 
 export const generateSummary = async (req: Request, res: Response) => {
   try {
@@ -9,25 +9,25 @@ export const generateSummary = async (req: Request, res: Response) => {
     if (!personalInfo || !workExperience) {
       return res.status(400).json({
         success: false,
-        message: 'Personal info and work experience are required'
+        message: "Personal info and work experience are required",
       });
     }
 
     const summary = await OpenAIService.generateProfessionalSummary(
-      personalInfo, 
-      workExperience, 
-      profession || 'Professional'
+      personalInfo,
+      workExperience,
+      profession || "Professional",
     );
 
     res.json({
       success: true,
-      data: { summary }
+      data: { summary },
     });
   } catch (error) {
-    logger.error('Generate Summary Error:', error);
+    logger.error("Generate Summary Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to generate summary'
+      message: "Failed to generate summary",
     });
   }
 };
@@ -39,24 +39,24 @@ export const optimizeExperience = async (req: Request, res: Response) => {
     if (!experience) {
       return res.status(400).json({
         success: false,
-        message: 'Experience data is required'
+        message: "Experience data is required",
       });
     }
 
     const optimizedExperience = await OpenAIService.optimizeWorkExperience(
-      experience, 
-      profession || 'Professional'
+      experience,
+      profession || "Professional",
     );
 
     res.json({
       success: true,
-      data: { experience: optimizedExperience }
+      data: { experience: optimizedExperience },
     });
   } catch (error) {
-    logger.error('Optimize Experience Error:', error);
+    logger.error("Optimize Experience Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to optimize experience'
+      message: "Failed to optimize experience",
     });
   }
 };
@@ -68,55 +68,58 @@ export const generateCoverLetter = async (req: Request, res: Response) => {
     if (!cvData || !jobDescription) {
       return res.status(400).json({
         success: false,
-        message: 'CV data and job description are required'
+        message: "CV data and job description are required",
       });
     }
 
     const coverLetter = await OpenAIService.generateCoverLetter(
-      cvData, 
-      jobDescription, 
-      profession || 'Professional'
+      cvData,
+      jobDescription,
+      profession || "Professional",
     );
 
     res.json({
       success: true,
-      data: { coverLetter }
+      data: { coverLetter },
     });
   } catch (error) {
-    logger.error('Generate Cover Letter Error:', error);
+    logger.error("Generate Cover Letter Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to generate cover letter'
+      message: "Failed to generate cover letter",
     });
   }
 };
 
-export const generateInterviewQuestions = async (req: Request, res: Response) => {
+export const generateInterviewQuestions = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     const { profession, jobDescription, experienceLevel } = req.body;
 
     if (!profession) {
       return res.status(400).json({
         success: false,
-        message: 'Profession is required'
+        message: "Profession is required",
       });
     }
 
     const questions = await OpenAIService.generateInterviewQuestions(
-      profession, 
-      jobDescription, 
-      experienceLevel
+      profession,
+      jobDescription,
+      experienceLevel,
     );
 
     res.json({
       success: true,
-      data: { questions }
+      data: { questions },
     });
   } catch (error) {
-    logger.error('Generate Interview Questions Error:', error);
+    logger.error("Generate Interview Questions Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to generate interview questions'
+      message: "Failed to generate interview questions",
     });
   }
 };
@@ -128,24 +131,24 @@ export const calculateATSScore = async (req: Request, res: Response) => {
     if (!cvData) {
       return res.status(400).json({
         success: false,
-        message: 'CV data is required'
+        message: "CV data is required",
       });
     }
 
     const result = await OpenAIService.calculateATSScore(
-      cvData, 
-      profession || 'Professional'
+      cvData,
+      profession || "Professional",
     );
 
     res.json({
       success: true,
-      data: result
+      data: result,
     });
   } catch (error) {
-    logger.error('Calculate ATS Score Error:', error);
+    logger.error("Calculate ATS Score Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to calculate ATS score'
+      message: "Failed to calculate ATS score",
     });
   }
 };
@@ -157,25 +160,25 @@ export const optimizeForJob = async (req: Request, res: Response) => {
     if (!cvData || !jobDescription) {
       return res.status(400).json({
         success: false,
-        message: 'CV data and job description are required'
+        message: "CV data and job description are required",
       });
     }
 
     const optimization = await OpenAIService.optimizeForJob(
-      cvData, 
-      jobDescription, 
-      profession || 'Professional'
+      cvData,
+      jobDescription,
+      profession || "Professional",
     );
 
     res.json({
       success: true,
-      data: optimization
+      data: optimization,
     });
   } catch (error) {
-    logger.error('Optimize for Job Error:', error);
+    logger.error("Optimize for Job Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to optimize CV for job'
+      message: "Failed to optimize CV for job",
     });
   }
 };
@@ -187,21 +190,24 @@ export const generateSkillSuggestions = async (req: Request, res: Response) => {
     if (!profession) {
       return res.status(400).json({
         success: false,
-        message: 'Profession is required'
+        message: "Profession is required",
       });
     }
 
-    const skills = await OpenAIService.generateSkillSuggestions(profession, experience || []);
+    const skills = await OpenAIService.generateSkillSuggestions(
+      profession,
+      experience || [],
+    );
 
     res.json({
       success: true,
-      data: { skills }
+      data: { skills },
     });
   } catch (error) {
-    logger.error('Generate Skill Suggestions Error:', error);
+    logger.error("Generate Skill Suggestions Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to generate skill suggestions'
+      message: "Failed to generate skill suggestions",
     });
   }
 };

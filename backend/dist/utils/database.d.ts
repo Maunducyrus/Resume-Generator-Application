@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from "sequelize-typescript";
 declare let sequelize: Sequelize;
 export declare const connectDB: () => Promise<void>;
 export declare const disconnectDB: () => Promise<void>;

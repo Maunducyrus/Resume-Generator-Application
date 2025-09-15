@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import { logger } from '../utils/logger';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+import { logger } from "../utils/logger";
 
 interface JwtPayload {
   userId: string;
@@ -21,12 +21,12 @@ declare global {
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Access denied. No token provided.'
+        message: "Access denied. No token provided.",
       });
     }
 
@@ -36,22 +36,22 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid token. User not found.'
+        message: "Invalid token. User not found.",
       });
     }
 
     req.user = {
       userId: user.id,
       email: user.email,
-      name: user.name
+      name: user.name,
     };
 
     next();
   } catch (error) {
-    logger.error('Auth Middleware Error:', error);
+    logger.error("Auth Middleware Error:", error);
     res.status(401).json({
       success: false,
-      message: 'Invalid token.'
+      message: "Invalid token.",
     });
   }
 };

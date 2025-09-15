@@ -1,22 +1,31 @@
-import { Table, Column, Model, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import User from './User';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  ForeignKey,
+  BelongsTo,
+} from "sequelize-typescript";
+import User from "./User";
 
 @Table({
-  tableName: 'cvs',
-  timestamps: true
+  tableName: "cvs",
+  timestamps: true,
 })
 export default class CV extends Model {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   })
   id!: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
-    allowNull: false
+    allowNull: false,
   })
   userId!: string;
 
@@ -24,20 +33,20 @@ export default class CV extends Model {
     type: DataType.STRING(200),
     allowNull: false,
     validate: {
-      len: [1, 200]
-    }
+      len: [1, 200],
+    },
   })
   name!: string;
 
   @Column({
     type: DataType.STRING,
-    allowNull: false
+    allowNull: false,
   })
   templateId!: string;
 
   @Column({
     type: DataType.JSONB,
-    allowNull: false
+    allowNull: false,
   })
   data!: {
     personalInfo: any;
@@ -53,39 +62,39 @@ export default class CV extends Model {
     defaultValue: 0,
     validate: {
       min: 0,
-      max: 100
-    }
+      max: 100,
+    },
   })
   atsScore!: number;
 
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   })
   isPublic!: boolean;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
-    unique: true
+    unique: true,
   })
   shareUrl?: string;
 
   @Column({
     type: DataType.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
   })
   downloadCount!: number;
 
   @Column({
     type: DataType.ARRAY(DataType.STRING),
-    defaultValue: []
+    defaultValue: [],
   })
   tags!: string[];
 
   @Column({
     type: DataType.STRING(100),
-    allowNull: true
+    allowNull: true,
   })
   profession?: string;
 

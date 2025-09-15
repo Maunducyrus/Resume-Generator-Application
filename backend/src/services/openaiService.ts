@@ -1,6 +1,6 @@
-import OpenAI from 'openai';
-import dotenv from 'dotenv';
-import { logger } from '../utils/logger';
+import OpenAI from "openai";
+import dotenv from "dotenv";
+import { logger } from "../utils/logger";
 
 dotenv.config();
 
@@ -9,11 +9,18 @@ const openai = new OpenAI({
 });
 
 export class OpenAIService {
-  static async generateProfessionalSummary(personalInfo: any, workExperience: any[], profession: string): Promise<string> {
+  static async generateProfessionalSummary(
+    personalInfo: any,
+    workExperience: any[],
+    profession: string,
+  ): Promise<string> {
     try {
-      const experienceText = workExperience.map(exp => 
-        `${exp.position} at ${exp.company} (${exp.startDate} - ${exp.endDate || 'Present'})`
-      ).join(', ');
+      const experienceText = workExperience
+        .map(
+          (exp) =>
+            `${exp.position} at ${exp.company} (${exp.startDate} - ${exp.endDate || "Present"})`,
+        )
+        .join(", ");
 
       const prompt = `Create a compelling professional summary for a ${profession} professional:
 
@@ -35,23 +42,29 @@ Generate a professional summary that would impress hiring managers in the ${prof
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 200,
-        temperature: 0.7
+        temperature: 0.7,
       });
 
-      return response.choices[0]?.message?.content || 'Experienced professional with a proven track record of success.';
+      return (
+        response.choices[0]?.message?.content ||
+        "Experienced professional with a proven track record of success."
+      );
     } catch (error) {
-      logger.error('OpenAI Summary Generation Error:', error);
+      logger.error("OpenAI Summary Generation Error:", error);
       return `Experienced ${profession} professional with strong background in delivering results and driving innovation.`;
     }
   }
 
-  static async optimizeWorkExperience(experience: any, profession: string): Promise<any> {
+  static async optimizeWorkExperience(
+    experience: any,
+    profession: string,
+  ): Promise<any> {
     try {
       const prompt = `Optimize this work experience for a ${profession} professional's CV:
 
 Position: ${experience.position}
 Company: ${experience.company}
-Current Responsibilities: ${experience.responsibilities.join(', ')}
+Current Responsibilities: ${experience.responsibilities.join(", ")}
 
 Requirements:
 - Use strong action verbs (Led, Developed, Implemented, Achieved, etc.)
@@ -67,7 +80,7 @@ Return as JSON with 'responsibilities' and 'achievements' arrays.`;
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 400,
-        temperature: 0.7
+        temperature: 0.7,
       });
 
       const content = response.choices[0]?.message?.content;
@@ -76,36 +89,52 @@ Return as JSON with 'responsibilities' and 'achievements' arrays.`;
           const parsed = JSON.parse(content);
           return {
             ...experience,
-            responsibilities: parsed.responsibilities || experience.responsibilities,
-            achievements: parsed.achievements || ['Exceeded performance targets by 20%', 'Improved team efficiency by 15%']
+            responsibilities:
+              parsed.responsibilities || experience.responsibilities,
+            achievements: parsed.achievements || [
+              "Exceeded performance targets by 20%",
+              "Improved team efficiency by 15%",
+            ],
           };
         } catch {
           return {
             ...experience,
-            responsibilities: experience.responsibilities.map((resp: string) => 
-              resp.startsWith('•') ? resp : `• ${resp.charAt(0).toUpperCase() + resp.slice(1)}`
+            responsibilities: experience.responsibilities.map((resp: string) =>
+              resp.startsWith("•")
+                ? resp
+                : `• ${resp.charAt(0).toUpperCase() + resp.slice(1)}`,
             ),
-            achievements: ['Exceeded performance targets by 20%', 'Improved operational efficiency by 15%']
+            achievements: [
+              "Exceeded performance targets by 20%",
+              "Improved operational efficiency by 15%",
+            ],
           };
         }
       }
       return experience;
     } catch (error) {
-      logger.error('OpenAI Experience Optimization Error:', error);
+      logger.error("OpenAI Experience Optimization Error:", error);
       return experience;
     }
   }
 
-  static async generateCoverLetter(cvData: any, jobDescription: string, profession: string): Promise<string> {
+  static async generateCoverLetter(
+    cvData: any,
+    jobDescription: string,
+    profession: string,
+  ): Promise<string> {
     try {
       const prompt = `Generate a professional cover letter for a ${profession} position:
 
 Applicant Details:
 - Name: ${cvData.personalInfo.fullName}
 - Email: ${cvData.personalInfo.email}
-- Current Role: ${cvData.workExperience[0]?.position || 'Professional'}
-- Experience: ${cvData.workExperience.map((exp: any) => `${exp.position} at ${exp.company}`).join(', ')}
-- Key Skills: ${cvData.skills.map((skill: any) => skill.name).slice(0, 8).join(', ')}
+- Current Role: ${cvData.workExperience[0]?.position || "Professional"}
+- Experience: ${cvData.workExperience.map((exp: any) => `${exp.position} at ${exp.company}`).join(", ")}
+- Key Skills: ${cvData.skills
+        .map((skill: any) => skill.name)
+        .slice(0, 8)
+        .join(", ")}
 - Education: ${cvData.education[0]?.degree} in ${cvData.education[0]?.field} from ${cvData.education[0]?.institution}
 
 Job Description: ${jobDescription}
@@ -127,22 +156,29 @@ Create a compelling cover letter that would make this candidate stand out for a 
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
-        temperature: 0.8
+        temperature: 0.8,
       });
 
-      return response.choices[0]?.message?.content || this.getFallbackCoverLetter(cvData, profession);
+      return (
+        response.choices[0]?.message?.content ||
+        this.getFallbackCoverLetter(cvData, profession)
+      );
     } catch (error) {
-      logger.error('OpenAI Cover Letter Generation Error:', error);
+      logger.error("OpenAI Cover Letter Generation Error:", error);
       return this.getFallbackCoverLetter(cvData, profession);
     }
   }
 
-  static async generateInterviewQuestions(profession: string, jobDescription?: string, experienceLevel?: string): Promise<string[]> {
+  static async generateInterviewQuestions(
+    profession: string,
+    jobDescription?: string,
+    experienceLevel?: string,
+  ): Promise<string[]> {
     try {
       const prompt = `Generate 12 comprehensive interview questions for a ${profession} position:
 
-${jobDescription ? `Job Description: ${jobDescription}` : ''}
-${experienceLevel ? `Experience Level: ${experienceLevel}` : ''}
+${jobDescription ? `Job Description: ${jobDescription}` : ""}
+${experienceLevel ? `Experience Level: ${experienceLevel}` : ""}
 
 Requirements:
 - Include behavioral questions (STAR method)
@@ -161,28 +197,34 @@ Return as a JSON array of question strings.`;
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 800,
-        temperature: 0.7
+        temperature: 0.7,
       });
 
       const content = response.choices[0]?.message?.content;
       if (content) {
         try {
           const questions = JSON.parse(content);
-          return Array.isArray(questions) ? questions : this.getFallbackQuestions(profession);
+          return Array.isArray(questions)
+            ? questions
+            : this.getFallbackQuestions(profession);
         } catch {
-          return content.split('\n')
-            .filter(q => q.trim().length > 0 && q.includes('?'))
+          return content
+            .split("\n")
+            .filter((q) => q.trim().length > 0 && q.includes("?"))
             .slice(0, 12);
         }
       }
       return this.getFallbackQuestions(profession);
     } catch (error) {
-      logger.error('OpenAI Interview Questions Error:', error);
+      logger.error("OpenAI Interview Questions Error:", error);
       return this.getFallbackQuestions(profession);
     }
   }
 
-  static async calculateATSScore(cvData: any, profession: string): Promise<{ score: number; suggestions: string[] }> {
+  static async calculateATSScore(
+    cvData: any,
+    profession: string,
+  ): Promise<{ score: number; suggestions: string[] }> {
     try {
       const prompt = `Analyze this ${profession} CV for ATS (Applicant Tracking System) compatibility:
 
@@ -213,7 +255,7 @@ Provide actionable suggestions for improving ATS compatibility specifically for 
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 500,
-        temperature: 0.3
+        temperature: 0.3,
       });
 
       const content = response.choices[0]?.message?.content;
@@ -222,7 +264,7 @@ Provide actionable suggestions for improving ATS compatibility specifically for 
           const result = JSON.parse(content);
           return {
             score: Math.min(100, Math.max(0, result.score || 75)),
-            suggestions: result.suggestions || []
+            suggestions: result.suggestions || [],
           };
         } catch {
           return this.getFallbackATSScore(cvData);
@@ -230,12 +272,16 @@ Provide actionable suggestions for improving ATS compatibility specifically for 
       }
       return this.getFallbackATSScore(cvData);
     } catch (error) {
-      logger.error('OpenAI ATS Score Error:', error);
+      logger.error("OpenAI ATS Score Error:", error);
       return this.getFallbackATSScore(cvData);
     }
   }
 
-  static async optimizeForJob(cvData: any, jobDescription: string, profession: string): Promise<any> {
+  static async optimizeForJob(
+    cvData: any,
+    jobDescription: string,
+    profession: string,
+  ): Promise<any> {
     try {
       const prompt = `Optimize this ${profession} CV for the following job posting:
 
@@ -265,7 +311,7 @@ Return JSON with:
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 700,
-        temperature: 0.7
+        temperature: 0.7,
       });
 
       const content = response.choices[0]?.message?.content;
@@ -274,24 +320,32 @@ Return JSON with:
           return JSON.parse(content);
         } catch {
           return {
-            keywords: ['leadership', 'innovation', 'results-driven'],
-            skillSuggestions: ['Communication', 'Project Management'],
-            experienceImprovements: ['Add more quantified achievements', 'Include relevant technical skills'],
-            overallScore: 75
+            keywords: ["leadership", "innovation", "results-driven"],
+            skillSuggestions: ["Communication", "Project Management"],
+            experienceImprovements: [
+              "Add more quantified achievements",
+              "Include relevant technical skills",
+            ],
+            overallScore: 75,
           };
         }
       }
       return null;
     } catch (error) {
-      logger.error('OpenAI Job Optimization Error:', error);
+      logger.error("OpenAI Job Optimization Error:", error);
       return null;
     }
   }
 
-  static async generateSkillSuggestions(profession: string, experience: any[]): Promise<string[]> {
+  static async generateSkillSuggestions(
+    profession: string,
+    experience: any[],
+  ): Promise<string[]> {
     try {
-      const experienceText = experience.map(exp => `${exp.position} at ${exp.company}`).join(', ');
-      
+      const experienceText = experience
+        .map((exp) => `${exp.position} at ${exp.company}`)
+        .join(", ");
+
       const prompt = `Based on this ${profession} professional's background:
 ${experienceText}
 
@@ -307,7 +361,7 @@ Return as JSON array of skill names.`;
         model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 300,
-        temperature: 0.7
+        temperature: 0.7,
       });
 
       const content = response.choices[0]?.message?.content;
@@ -316,24 +370,39 @@ Return as JSON array of skill names.`;
           const skills = JSON.parse(content);
           return Array.isArray(skills) ? skills : [];
         } catch {
-          return content.split('\n').filter(s => s.trim().length > 0).slice(0, 15);
+          return content
+            .split("\n")
+            .filter((s) => s.trim().length > 0)
+            .slice(0, 15);
         }
       }
       return [];
     } catch (error) {
-      logger.error('OpenAI Skill Suggestions Error:', error);
-      return ['Communication', 'Leadership', 'Problem Solving', 'Project Management', 'Teamwork'];
+      logger.error("OpenAI Skill Suggestions Error:", error);
+      return [
+        "Communication",
+        "Leadership",
+        "Problem Solving",
+        "Project Management",
+        "Teamwork",
+      ];
     }
   }
 
-  private static getFallbackCoverLetter(cvData: any, profession: string): string {
+  private static getFallbackCoverLetter(
+    cvData: any,
+    profession: string,
+  ): string {
     return `Dear Hiring Manager,
 
-I am writing to express my strong interest in the ${profession} position at your company. With my background in ${cvData.workExperience[0]?.position || 'professional services'} and ${cvData.education[0]?.degree || 'relevant education'}, I am confident I would be a valuable addition to your team.
+I am writing to express my strong interest in the ${profession} position at your company. With my background in ${cvData.workExperience[0]?.position || "professional services"} and ${cvData.education[0]?.degree || "relevant education"}, I am confident I would be a valuable addition to your team.
 
-My experience at ${cvData.workExperience[0]?.company || 'previous companies'} has equipped me with the skills necessary to excel in this role. I have successfully ${cvData.workExperience[0]?.responsibilities[0] || 'contributed to various projects'}, demonstrating my ability to deliver results in challenging environments.
+My experience at ${cvData.workExperience[0]?.company || "previous companies"} has equipped me with the skills necessary to excel in this role. I have successfully ${cvData.workExperience[0]?.responsibilities[0] || "contributed to various projects"}, demonstrating my ability to deliver results in challenging environments.
 
-I am particularly drawn to this opportunity because it aligns perfectly with my career goals and allows me to leverage my expertise in ${cvData.skills.slice(0, 3).map((s: any) => s.name).join(', ')}.
+I am particularly drawn to this opportunity because it aligns perfectly with my career goals and allows me to leverage my expertise in ${cvData.skills
+      .slice(0, 3)
+      .map((s: any) => s.name)
+      .join(", ")}.
 
 Thank you for considering my application. I look forward to the opportunity to discuss how I can contribute to your team's continued success.
 
@@ -350,56 +419,64 @@ ${cvData.personalInfo.fullName}`;
       "Where do you see yourself in 5 years?",
       "What motivates you in your work?",
       "How do you handle working under pressure?",
-      "Describe your experience with team collaboration."
+      "Describe your experience with team collaboration.",
     ];
 
     const professionSpecific: { [key: string]: string[] } = {
-      'software engineer': [
+      "software engineer": [
         "Describe your experience with version control systems.",
         "How do you approach debugging complex issues?",
         "What's your experience with agile development methodologies?",
-        "How do you stay updated with new technologies?"
+        "How do you stay updated with new technologies?",
       ],
-      'marketing': [
+      marketing: [
         "How do you measure the success of a marketing campaign?",
         "Describe your experience with digital marketing tools.",
         "How do you stay updated with marketing trends?",
-        "Tell me about a successful campaign you've managed."
+        "Tell me about a successful campaign you've managed.",
       ],
-      'manager': [
+      manager: [
         "How do you motivate your team during challenging times?",
         "Describe your leadership style.",
         "How do you handle conflicts within your team?",
-        "Tell me about a time you had to make a difficult decision."
-      ]
+        "Tell me about a time you had to make a difficult decision.",
+      ],
     };
 
-    const category = Object.keys(professionSpecific).find(key => 
-      profession.toLowerCase().includes(key)
+    const category = Object.keys(professionSpecific).find((key) =>
+      profession.toLowerCase().includes(key),
     );
-    
-    return [...baseQuestions, ...(category ? professionSpecific[category] : [])];
+
+    return [
+      ...baseQuestions,
+      ...(category ? professionSpecific[category] : []),
+    ];
   }
 
-  private static getFallbackATSScore(cvData: any): { score: number; suggestions: string[] } {
+  private static getFallbackATSScore(cvData: any): {
+    score: number;
+    suggestions: string[];
+  } {
     let score = 0;
     const suggestions: string[] = [];
 
     // Personal info completeness (25 points)
-    const personalFields = Object.values(cvData.personalInfo).filter((v: any) => v && v.length > 0);
+    const personalFields = Object.values(cvData.personalInfo).filter(
+      (v: any) => v && v.length > 0,
+    );
     const personalScore = Math.min(25, (personalFields.length / 7) * 25);
     score += personalScore;
-    
+
     if (personalScore < 20) {
-      suggestions.push('Complete all personal information fields');
+      suggestions.push("Complete all personal information fields");
     }
 
     // Work experience (30 points)
     const expScore = Math.min(30, cvData.workExperience.length * 10);
     score += expScore;
-    
+
     if (expScore < 20) {
-      suggestions.push('Add more detailed work experience');
+      suggestions.push("Add more detailed work experience");
     }
 
     // Education (20 points)
@@ -409,17 +486,22 @@ ${cvData.personalInfo.fullName}`;
     // Skills (15 points)
     const skillScore = Math.min(15, cvData.skills.length * 1.5);
     score += skillScore;
-    
+
     if (skillScore < 10) {
-      suggestions.push('Add more relevant skills');
+      suggestions.push("Add more relevant skills");
     }
 
     // Projects & Certifications (10 points)
-    const extraScore = Math.min(10, (cvData.projects.length + cvData.certifications.length) * 2);
+    const extraScore = Math.min(
+      10,
+      (cvData.projects.length + cvData.certifications.length) * 2,
+    );
     score += extraScore;
 
     if (suggestions.length === 0) {
-      suggestions.push('Your CV looks good! Consider adding quantified achievements.');
+      suggestions.push(
+        "Your CV looks good! Consider adding quantified achievements.",
+      );
     }
 
     return { score: Math.round(score), suggestions };

@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import CV from '../models/CV';
-import User from '../models/User';
-import { logger } from '../utils/logger';
-import { v4 as uuidv4 } from 'uuid';
-import { Op } from 'sequelize';
+import { Request, Response } from "express";
+import CV from "../models/CV";
+import User from "../models/User";
+import { logger } from "../utils/logger";
+import { v4 as uuidv4 } from "uuid";
+import { Op } from "sequelize";
 
 export const createCV = async (req: Request, res: Response) => {
   try {
@@ -15,19 +15,19 @@ export const createCV = async (req: Request, res: Response) => {
       templateId,
       data,
       profession: profession?.trim(),
-      shareUrl: uuidv4()
+      shareUrl: uuidv4(),
     });
 
     res.status(201).json({
       success: true,
-      message: 'CV created successfully',
-      data: { cv }
+      message: "CV created successfully",
+      data: { cv },
     });
   } catch (error) {
-    logger.error('Create CV Error:', error);
+    logger.error("Create CV Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to create CV'
+      message: "Failed to create CV",
     });
   }
 };
@@ -35,7 +35,7 @@ export const createCV = async (req: Request, res: Response) => {
 export const getUserCVs = async (req: Request, res: Response) => {
   try {
     const { page = 1, limit = 10, profession, templateId } = req.query;
-    
+
     const where: any = { userId: req.user?.userId };
     if (profession) where.profession = profession;
     if (templateId) where.templateId = templateId;
@@ -44,13 +44,15 @@ export const getUserCVs = async (req: Request, res: Response) => {
 
     const { rows: cvs, count: total } = await CV.findAndCountAll({
       where,
-      order: [['updatedAt', 'DESC']],
+      order: [["updatedAt", "DESC"]],
       limit: Number(limit),
       offset,
-      include: [{
-        model: User,
-        attributes: ['name', 'email']
-      }]
+      include: [
+        {
+          model: User,
+          attributes: ["name", "email"],
+        },
+      ],
     });
 
     res.json({
@@ -61,15 +63,15 @@ export const getUserCVs = async (req: Request, res: Response) => {
           page: Number(page),
           limit: Number(limit),
           total,
-          pages: Math.ceil(total / Number(limit))
-        }
-      }
+          pages: Math.ceil(total / Number(limit)),
+        },
+      },
     });
   } catch (error) {
-    logger.error('Get User CVs Error:', error);
+    logger.error("Get User CVs Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get CVs'
+      message: "Failed to get CVs",
     });
   }
 };
@@ -77,30 +79,30 @@ export const getUserCVs = async (req: Request, res: Response) => {
 export const getCVById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    
+
     const cv = await CV.findOne({
       where: {
         id,
-        userId: req.user?.userId
-      }
+        userId: req.user?.userId,
+      },
     });
 
     if (!cv) {
       return res.status(404).json({
         success: false,
-        message: 'CV not found'
+        message: "CV not found",
       });
     }
 
     res.json({
       success: true,
-      data: { cv }
+      data: { cv },
     });
   } catch (error) {
-    logger.error('Get CV Error:', error);
+    logger.error("Get CV Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get CV'
+      message: "Failed to get CV",
     });
   }
 };
@@ -113,14 +115,14 @@ export const updateCV = async (req: Request, res: Response) => {
     const cv = await CV.findOne({
       where: {
         id,
-        userId: req.user?.userId
-      }
+        userId: req.user?.userId,
+      },
     });
 
     if (!cv) {
       return res.status(404).json({
         success: false,
-        message: 'CV not found'
+        message: "CV not found",
       });
     }
 
@@ -134,14 +136,14 @@ export const updateCV = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: 'CV updated successfully',
-      data: { cv }
+      message: "CV updated successfully",
+      data: { cv },
     });
   } catch (error) {
-    logger.error('Update CV Error:', error);
+    logger.error("Update CV Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update CV'
+      message: "Failed to update CV",
     });
   }
 };
@@ -153,14 +155,14 @@ export const deleteCV = async (req: Request, res: Response) => {
     const cv = await CV.findOne({
       where: {
         id,
-        userId: req.user?.userId
-      }
+        userId: req.user?.userId,
+      },
     });
 
     if (!cv) {
       return res.status(404).json({
         success: false,
-        message: 'CV not found'
+        message: "CV not found",
       });
     }
 
@@ -168,13 +170,13 @@ export const deleteCV = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: 'CV deleted successfully'
+      message: "CV deleted successfully",
     });
   } catch (error) {
-    logger.error('Delete CV Error:', error);
+    logger.error("Delete CV Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to delete CV'
+      message: "Failed to delete CV",
     });
   }
 };
@@ -187,14 +189,14 @@ export const shareCV = async (req: Request, res: Response) => {
     const cv = await CV.findOne({
       where: {
         id,
-        userId: req.user?.userId
-      }
+        userId: req.user?.userId,
+      },
     });
 
     if (!cv) {
       return res.status(404).json({
         success: false,
-        message: 'CV not found'
+        message: "CV not found",
       });
     }
 
@@ -209,17 +211,17 @@ export const shareCV = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: `CV ${isPublic ? 'shared' : 'unshared'} successfully`,
-      data: { 
+      message: `CV ${isPublic ? "shared" : "unshared"} successfully`,
+      data: {
         shareUrl: cv.shareUrl,
-        isPublic: cv.isPublic
-      }
+        isPublic: cv.isPublic,
+      },
     });
   } catch (error) {
-    logger.error('Share CV Error:', error);
+    logger.error("Share CV Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update sharing settings'
+      message: "Failed to update sharing settings",
     });
   }
 };
@@ -231,18 +233,20 @@ export const getSharedCV = async (req: Request, res: Response) => {
     const cv = await CV.findOne({
       where: {
         shareUrl,
-        isPublic: true
+        isPublic: true,
       },
-      include: [{
-        model: User,
-        attributes: ['name']
-      }]
+      include: [
+        {
+          model: User,
+          attributes: ["name"],
+        },
+      ],
     });
 
     if (!cv) {
       return res.status(404).json({
         success: false,
-        message: 'Shared CV not found'
+        message: "Shared CV not found",
       });
     }
 
@@ -252,13 +256,13 @@ export const getSharedCV = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      data: { cv }
+      data: { cv },
     });
   } catch (error) {
-    logger.error('Get Shared CV Error:', error);
+    logger.error("Get Shared CV Error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get shared CV'
+      message: "Failed to get shared CV",
     });
   }
 };

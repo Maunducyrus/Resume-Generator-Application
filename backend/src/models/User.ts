@@ -1,16 +1,25 @@
-import { Table, Column, Model, DataType, CreatedAt, UpdatedAt, HasMany, BeforeCreate } from 'sequelize-typescript';
-import bcrypt from 'bcryptjs';
-import CV from './CV';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  HasMany,
+  BeforeCreate,
+} from "sequelize-typescript";
+import bcrypt from "bcryptjs";
+import CV from "./CV";
 
 @Table({
-  tableName: 'users',
-  timestamps: true
+  tableName: "users",
+  timestamps: true,
 })
 export default class User extends Model {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   })
   id!: string;
 
@@ -18,8 +27,8 @@ export default class User extends Model {
     type: DataType.STRING(100),
     allowNull: false,
     validate: {
-      len: [2, 100]
-    }
+      len: [2, 100],
+    },
   })
   name!: string;
 
@@ -28,8 +37,8 @@ export default class User extends Model {
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true
-    }
+      isEmail: true,
+    },
   })
   email!: string;
 
@@ -37,38 +46,38 @@ export default class User extends Model {
     type: DataType.STRING,
     allowNull: false,
     validate: {
-      len: [6, 255]
-    }
+      len: [6, 255],
+    },
   })
   password!: string;
 
   @Column({
     type: DataType.STRING,
-    allowNull: true
+    allowNull: true,
   })
   avatar?: string;
 
   @Column({
     type: DataType.STRING(100),
-    allowNull: true
+    allowNull: true,
   })
   profession?: string;
 
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   })
   isVerified!: boolean;
 
   @Column({
     type: DataType.STRING,
-    allowNull: true
+    allowNull: true,
   })
   resetPasswordToken?: string;
 
   @Column({
     type: DataType.DATE,
-    allowNull: true
+    allowNull: true,
   })
   resetPasswordExpires?: Date;
 

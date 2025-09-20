@@ -9,7 +9,8 @@
     "dev": "nodemon src/server.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prestart": "npm run build"
   },
   "dependencies": {
     "@types/pg": "^8.15.5",

@@ -190,6 +190,7 @@ export const cvAPI = {
 };
 
 // AI API
+
 export const aiAPI = {
   generateSummary: async (data: {
     personalInfo: any;

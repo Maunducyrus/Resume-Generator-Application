@@ -43,7 +43,7 @@ export const connectDB = async () => {
     // Sync models
     if (process.env.NODE_ENV !== "production") {
       logger.warn("⚠️  Runnning schema sync in production (one-time)!");
-      await sequelize.sync({ alter: true });
+      await sequelize.sync({ force: true });
     } else {
       await sequelize.sync({ alter: true}); //Always sync in dev
     }

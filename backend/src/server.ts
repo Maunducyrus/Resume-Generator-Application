@@ -21,6 +21,9 @@ console.log(
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ✅ Trust Railway/Render/Heroku proxies so express-rate-limit can read IPs correctly
+app.set("trust proxy", 1);
+
 // Security middleware
 app.use(
   helmet({

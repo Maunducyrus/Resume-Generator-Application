@@ -40,8 +40,19 @@ export const connectDB = async () => {
     await sequelize.authenticate();
     logger.info("✅ PostgreSQL connected successfully");
 
-    await sequelize.sync({ alter: process.env.NODE_ENV === "development" });
-    logger.info("✅ Database synchronized");
+    // Sync models
+    if (process.env.NODE_ENV !== "production") {
+      logger.warn("⚠️  Runnning schema sync in production (one-time)!");
+      await sequelize.sync({ alter: true });
+    } else {
+      await sequelize.sync({ alter: true}); //Always sync in dev
+    }
+    logger.info("✅ Database models synchronized");
+
+
+
+    // await sequelize.sync({ alter: process.env.NODE_ENV === "development" });
+    // logger.info("✅ Database synchronized");
   } catch (error) {
     logger.error("❌ PostgreSQL connection failed:", error);
     // Don't exit — allow server to keep running for health checks

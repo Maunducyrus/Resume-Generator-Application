@@ -3,6 +3,7 @@ import { logger } from "./logger";
 import User from "../models/User";
 import CV from "../models/CV";
 
+
 let sequelize: Sequelize;
 
 export const connectDB = async () => {

@@ -26,12 +26,25 @@ export const register = async (req: Request, res: Response) => {
     }
 
     // Create new user
-    const user = await User.create({
-      name: name.trim(),
-      email: email.toLowerCase(),
-      password,
-      profession: profession?.trim(),
-    });
+    // const user = await User.create({
+    //   name: name.trim(),
+    //   email: email.toLowerCase(),
+    //   password,
+    //   profession: profession?.trim(),
+    // });
+
+    // Hash password before saving
+        const salt = await bcrypt.genSalt(12);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create new user
+        const user = await User.create({
+          name: name.trim(),
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          profession: profession?.trim(),
+        });
+
 
     // Generate token
     const token = generateToken(user.id);
